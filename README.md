@@ -76,6 +76,7 @@ The full architecture, checklists, and ready-to-use system prompts for Rings 0 a
 heartwood/
 ├── README.md
 ├── ROADMAP.md
+├── LICENSE                        # MIT
 ├── CONTRIBUTING.md
 ├── docs/
 │   ├── architecture.md            # Ring 0 + Ring 1 architecture + prompts
@@ -207,6 +208,12 @@ Heartwood is overkill for a single-user weekend project. It's aimed at apps comp
 
 **Does it work with local models?**
 In principle, yes — any model with streaming + tool-calling will work. Quality of elicitation scales with model capability, so very small local models won't perform as well on the compression-and-inference behavior the agents rely on.
+
+---
+
+## License
+
+MIT. See [LICENSE](./LICENSE).
 
 ---
 
