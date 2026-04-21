@@ -14,8 +14,6 @@ Heartwood is the dense, structural core of a tree, formed from the growth rings 
 
 That's what this project does. Each layer is a ring: foundations, UI, API, data, implementation. The strength of what you end up building depends on every ring being laid down properly, in order, with nothing skipped.
 
-(If you were looking for the alternate name during brainstorming: **Rootspec** was the runner-up — more literal, less poetic. Fork and rename if you prefer it.)
-
 ---
 
 ## The problem Heartwood solves
