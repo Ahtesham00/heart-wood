@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systems Elicitation Workspace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-layout" id="app-container">
+        <!-- 1. Left Nav Panel -->
+        <aside class="panel" id="left-panel">
+            <div class="left-nav-header">
+                <img src="/logo.png" style="width:28px; height:28px; border-radius:4px;" />
+                <h2>Heart Wood</h2>
+            </div>
+            
+            <div class="new-session-container">
+                <button type="button" class="btn brand-btn" id="btn-start-quick" style="width: 100%;">
+                    <i class="ph ph-plus-circle" style="font-size: 18px;"></i>
+                    New Session
+                </button>
+            </div>
+            
+            <div style="padding: 0 20px 10px 20px; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">
+                Your History
+            </div>
+            <div class="sessions-list-container" id="sessions-list">
+                <!-- DB mapped items load here -->
+            </div>
+        </aside>
+
+        <!-- 2. Main Chat Area -->
+        <main class="chat-container">
+            <header>
+                <div style="display:flex; align-items:center; gap:8px; font-weight:500;">
+                    <i class="ph ph-chat-centered-text" style="color:var(--text-secondary);"></i>
+                    <span id="chat-header-name">New Project</span>
+                    <i class="ph ph-pencil-simple" id="btn-rename-session" style="cursor:pointer; color:var(--text-secondary); margin-left:5px; font-size:16px; padding:4px;" title="Rename Session"></i>
+                    <i class="ph ph-trash" id="btn-delete-session" style="cursor:pointer; color:var(--text-secondary); font-size:16px; padding:4px;" title="Delete Session"></i>
+                </div>
+            </header>
+            
+            <div class="messages" id="chat-messages">
+                <!-- messages string -->
+            </div>
+            
+            <form class="chat-input-form" id="chat-form">
+                <input type="text" id="chat-input" placeholder="Message Heart Wood..." autocomplete="off">
+                <button type="submit" id="btn-send"><i class="ph ph-paper-plane-right"></i> Send</button>
+            </form>
+        </main>
+
+        <!-- 3. Right Artifacts Panel -->
+        <aside class="panel panel-right">
+            <div class="drawer-header" style="border-bottom: 1px solid var(--border-glass);">
+                <div class="tabs">
+                    <button class="tab active" data-target="tab-state"><i class="ph ph-cpu"></i> State</button>
+                    <button class="tab" data-target="tab-foundations"><i class="ph ph-file-text"></i> Foundations</button>
+                    <button class="tab" data-target="tab-uispec"><i class="ph ph-columns"></i> UI Spec</button>
+                    <button class="tab" data-target="tab-htmlmock"><i class="ph ph-browser"></i> Mock</button>
+                    <button class="tab" data-target="tab-logs"><i class="ph ph-list-bullets"></i> Logs</button>
+                </div>
+            </div>
+            
+            <!-- State Tracker -->
+            <div class="tab-content" id="tab-state">
+                <div class="metrics">
+                    <div class="metric"><div id="m-layer" style="font-size:24px;font-weight:600;color:var(--accent);">0</div><div style="font-size:12px;color:var(--text-secondary);">Layer</div></div>
+                    <div class="metric"><div id="m-decisions" style="font-size:24px;font-weight:600;color:var(--accent);">0</div><div style="font-size:12px;color:var(--text-secondary);">Decisions</div></div>
+                    <div class="metric"><div id="m-assumptions" style="font-size:24px;font-weight:600;color:var(--accent);">0</div><div style="font-size:12px;color:var(--text-secondary);">Assumptions</div></div>
+                    <div class="metric"><div id="m-skipped" style="font-size:24px;font-weight:600;color:var(--accent);">0</div><div style="font-size:12px;color:var(--text-secondary);">Skipped</div></div>
+                </div>
+                
+                <div class="session-info" style="margin-top:20px;">
+                    <h3 style="font-size:14px; margin-bottom:5px; color:var(--text-secondary);">Session Brief</h3>
+                    <p id="brief-text" style="font-size:13px; line-height:1.4; padding:10px; background:var(--bg-main); border-radius:6px; border:1px solid var(--border-glass);">Loading...</p>
+                </div>
+
+                <div class="brief" style="margin-top:20px; max-height:200px; overflow-y:auto; border-bottom:1px solid var(--border-glass); padding-bottom:10px;">
+                    <h3 style="font-size:14px; margin-bottom:10px; color:var(--text-secondary);">Locked Decisions</h3>
+                    <ul id="state-decisions-list" style="list-style:none; padding:0; margin:0; font-size:12px; display:flex; flex-direction:column; gap:8px;"></ul>
+                </div>
+                
+                <div class="brief" style="margin-top:20px; max-height:200px; overflow-y:auto;">
+                    <h3 style="font-size:14px; margin-bottom:10px; color:var(--text-secondary);">Saved Assumptions</h3>
+                    <ul id="state-assumptions-list" style="list-style:none; padding:0; margin:0; font-size:12px; display:flex; flex-direction:column; gap:8px;"></ul>
+                </div>
+            </div>
+
+            <div class="tab-content hidden" id="tab-foundations">
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:10px;">
+                    <button id="btn-download-foundations" class="btn brand-btn hidden"><i class="ph ph-download-simple"></i> Download .md</button>
+                </div>
+                <div id="foundations-content" class="markdown-body">
+                    <em>No foundational decisions locked yet. Chat with the agent to generate.</em>
+                </div>
+                <div id="assumptions-content" class="markdown-body" style="margin-top:20px; border-top:1px solid var(--border-glass); padding-top:20px;">
+                </div>
+            </div>
+            
+            <div class="tab-content hidden" id="tab-uispec">
+                <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+                    <button id="btn-download-uispec" class="btn brand-btn hidden"><i class="ph ph-download-simple"></i> Download .md</button>
+                </div>
+                <div class="markdown-body" id="uispec-content">
+                    <em>No UI specs developed yet. Complete Layer 0 to proceed to Layer 1.</em>
+                </div>
+            </div>
+            
+            <div class="tab-content hidden" id="tab-htmlmock" style="padding: 0; overflow: hidden;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px 20px; border-bottom: 1px solid var(--border-glass);">
+                    <div style="display:flex; gap:10px;">
+                        <button id="btn-view-preview" class="btn active">Preview</button>
+                        <button id="btn-view-code" class="btn">Code</button>
+                    </div>
+                    <button id="btn-download-html" class="btn brand-btn hidden"><i class="ph ph-download-simple"></i> Download</button>
+                </div>
+                
+                <div id="mock-preview-container" style="flex:1; width:100%; height:100%;">
+                    <iframe id="iframe-mock" style="width:100%; height:100%; border:none; background:white;"></iframe>
+                </div>
+                
+                <div id="mock-code-container" class="hidden" style="flex:1; padding:20px; overflow-y:auto;">
+                    <pre style="background:#111; padding:15px; border-radius:6px; overflow-x:auto;"><code id="code-htmlmock" style="color:white; font-size: 13px;">No HTML Mock has been deployed by the Agent yet.</code></pre>
+                </div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div class="tab-content hidden" id="tab-logs">
+                <h3 style="font-size:14px; margin-bottom:10px; color:var(--text-secondary);">Tool Execution History</h3>
+                <ul id="tools-log" style="list-style:none; padding:0; margin:0; font-size:12px; display:flex; flex-direction:column; gap:8px; color:var(--text-secondary);">
+                    <li><em>No tool events recorded in this session yet.</em></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Onboarding overlay is completely removed as requested! -->
+
+    <script src="/api.js"></script>
+    <script src="/ui.js"></script>
+</body>
+</html>
